@@ -10,12 +10,21 @@ import { calculatorButtons } from '../data/calculator-bonus-03-button-data.js'
 
 function App() {
   const [memory, setMemory] = useState(0);
+  const [operandA, setOperandA] = useState("0");
   const [operator, setOperator] = useState("");
-  const [operandA, setOperandA] = useState("");
   const [operandB, setOperandB] = useState("");
 
-  function updateOperands(value) {
-    operator ? setOperandB(operandB + value) : setOperandA(operandA + value);
+  function updateOperandB(value) {
+    if (value !== "." || !operandB.includes(".")) {
+      setOperandB(operandB + value);
+    }
+  }
+
+  function updateOperandA(value) {
+    if (value !== "." || !operandA.includes(".")) {
+      (operandA === "0" && value !== ".") ? setOperandA(value) :
+        setOperandA(operandA + value);
+    }
   }
 
   function updateOperator(value) {
@@ -44,31 +53,79 @@ function App() {
     return result;
   }
 
+  function toggleSignOperandA() {
+    operandA.startsWith("-") ? setOperandA(operandA.slice(1)) : 
+      setOperandA("-" + operandA);
+  }
+
+  function toggleSignOperandB() {
+    operandB.startsWith("-") ? setOperandB(operandB.slice(1)) : 
+      setOperandB("-" + operandB);
+  }
+
+  function reset() {
+    setOperandA("0");
+    setOperator("");
+    setOperandB("");
+  }  
+
+  function handleClearButtonClicked(value) {
+    (value === "All Clear") ? reset() :
+      operandB ? setOperandB("") :
+        operator ? setOperator("") :
+          setOperandA("0");
+  }
+
+  function handleMemoryButtonClicked(value) {
+    const activeOperandFlt = operandB ? parseFloat(operandB) : 
+      parseFloat(operandA);
+    switch (value) {
+      case "Memory Save":
+        setMemory(activeOperandFlt);
+        break;
+      case "Memory Clear":
+        setMemory(0);
+        break;
+      case "Memory Recall":
+        operandB ? setOperandB(memory.toString()) : 
+          setOperandA(memory.toString());
+        break;
+      case "Memory Subtract":
+        setMemory(memory - activeOperandFlt);
+        break;
+      case "Memory Addition":
+        setMemory(memory + activeOperandFlt);
+        break;
+    }
+  }
+
   const handleButtonClicked = (button) => {
     switch(button.getAttribute("data-type")) {
       case "number":
-        updateOperands(button.value);
+        operator ? updateOperandB(button.value) : 
+          updateOperandA(button.value);
         break;
       case "operator":
         updateOperator(button.value);
         break;
       case "enter":
         const result = evaluateExpression();
-        setOperandA(result);
+        setOperandA(result.toString());
         setOperator("");
         setOperandB("");
         break;
       case "clear":
+        handleClearButtonClicked(button.value);
         break;
       case "memory":
+        handleMemoryButtonClicked(button.value);
         break;
       case "sign":
+        operator ? toggleSignOperandB() : toggleSignOperandA();
         break;
       case "percent":
         break;
       case "sqrt":
-        break;
-      default:
         break;
     }
   }
