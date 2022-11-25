@@ -1,11 +1,27 @@
-.App{
+.wrapper{
+  box-sizing: border-box;
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
+  margin: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.calculator {
+  border: solid grey 2px;
+  padding: 10px;
+}
+
+.buttonArea {
+  display: flex;
+  
 }

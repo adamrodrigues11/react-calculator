@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from '../styles/Display.module.css';
 
-function Display() {
+function Display( { text }) {
   return (
-    <div className={styles.display}><p>Display will go here</p></div>
+    <div className={styles.display}><p>{ text }</p></div>
   );
 }
 
