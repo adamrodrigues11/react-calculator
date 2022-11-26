@@ -52,27 +52,34 @@ function App() {
         result = operandsFloat[0] / operandsFloat[1];
         break;
     }
+    if (isNaN(result) || !isFinite(result)) {
+      throw Error("Error")
+    }
     return result;
   }
 
   function toggleSignOperandA() {
-    operandA.startsWith("-") ? setOperandA(operandA.slice(1)) : 
+    if (operandA !== "0") {
+      operandA.startsWith("-") ? setOperandA(operandA.slice(1)) : 
       setOperandA("-" + operandA);
+    }
   }
 
   function toggleSignOperandB() {
-    operandB.startsWith("-") ? setOperandB(operandB.slice(1)) : 
+    if (operandB !== "0" && operandB !== "") {
+      operandB.startsWith("-") ? setOperandB(operandB.slice(1)) : 
       setOperandB("-" + operandB);
+    }  
   }
 
-  function reset() {
+  function resetDisplay() {
     setOperandA("0");
     setOperator("");
     setOperandB("");
   }  
 
   function handleClearButtonClicked(value) {
-    (value === "All Clear") ? reset() :
+    (value === "All Clear") ? resetDisplay() :
       operandB ? setOperandB("") :
         operator ? setOperator("") :
           setOperandA("0");
@@ -106,7 +113,11 @@ function App() {
   }
 
   function sqrt(operand) {
-    return (Math.sqrt(parseFloat(operand)).toString());
+    const result = Math.sqrt(parseFloat(operand));
+    if (isNaN(result)) {
+      throw Error("Error")
+    }
+    return result.toString();
   }
 
   const handleButtonClicked = (button) => {
@@ -119,10 +130,14 @@ function App() {
         updateOperator(button.value);
         break;
       case "enter":
-        const result = evaluateExpression();
-        setOperandA(result.toString());
-        setOperator("");
-        setOperandB("");
+        try {
+          const result = evaluateExpression();
+          resetDisplay();
+          setOperandA(result.toString());
+        } catch(error) {
+          resetDisplay();
+          setOperandA(error.message);
+        }
         break;
       case "clear":
         handleClearButtonClicked(button.value);
@@ -138,8 +153,13 @@ function App() {
           setOperandA(percent(operandA));
         break;
       case "sqrt":
-        operandB ? setOperandB(sqrt(operandB)) :
-          setOperandA(sqrt(operandA));
+        try {
+          operandB ? setOperandB(sqrt(operandB)) :
+            setOperandA(sqrt(operandA));
+        } catch(error) {
+          resetDisplay();
+          setOperandA(error.message);
+        }
         break;
     }
   }
