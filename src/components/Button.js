@@ -7,7 +7,7 @@ function Button( {dataType, className, value, text, handleButtonClicked} ) {
   }
   
   return (
-      <button data-type={dataType} className={className} value={value} text={text} onClick={handleClick}>{text}</button>
+      <button data-type={dataType} className={ "button " + className} value={value} text={text} onClick={handleClick}>{text}</button>
   );
 }
 

@@ -7,7 +7,6 @@ import Footer from './Footer';
 import { useState, useEffect } from 'react';
 import { calculatorButtons } from '../data/calculator-bonus-03-button-data.js'
 
-
 function App() {
   const [memory, setMemory] = useState(0);
   const [operandA, setOperandA] = useState("0");
@@ -34,7 +33,10 @@ function App() {
   }
 
   function evaluateExpression() {
-    const operandsFloat = [parseFloat(operandA), parseFloat(operandB)];
+    const operandsFloat = [
+      parseFloat(operandA), 
+      operandB ? parseFloat(operandB) : 0
+    ];
     let result;
     switch (operator) {
       case "+":
@@ -99,6 +101,14 @@ function App() {
     }
   }
 
+  function percent(operand) {
+    return (parseFloat(operand) / 100.0).toString();
+  }
+
+  function sqrt(operand) {
+    return (Math.sqrt(parseFloat(operand)).toString());
+  }
+
   const handleButtonClicked = (button) => {
     switch(button.getAttribute("data-type")) {
       case "number":
@@ -124,8 +134,12 @@ function App() {
         operator ? toggleSignOperandB() : toggleSignOperandA();
         break;
       case "percent":
+        operandB ? setOperandB(percent(operandB)) :
+          setOperandA(percent(operandA));
         break;
       case "sqrt":
+        operandB ? setOperandB(sqrt(operandB)) :
+          setOperandA(sqrt(operandA));
         break;
     }
   }
@@ -155,11 +169,11 @@ function App() {
       <div className="calculator">
         <Header title={"Calculator App"}/>
         <Display text={ operandA + operator + operandB }/>
-        <div className='buttonArea'>
+        <div className="buttonArea">
         {createButtons()}
         </div>
       </div>
-      <Footer />
+      <Footer author={"Adam Rodrigues"}/>
     </div>
   );
 }

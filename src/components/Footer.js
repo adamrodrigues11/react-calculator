@@ -1,9 +1,16 @@
-import React from 'react'
+import { getYear } from "../utilities/utils";
 
-function Footer() {
-  return (
-    <footer>Footer</footer>
-  );
+function Footer({ copyright, author }) {
+    return(
+        <footer>
+            <p>&copy; {copyright} {author}</p> 
+        </footer>
+    );
 }
+
+Footer.defaultProps = {
+    copyright: getYear(),
+    author: "Anonymous"
+};
 
 export default Footer;
