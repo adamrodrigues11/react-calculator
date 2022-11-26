@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ac {
+  grid-area: ac;
+}
+  
+.c {
+  grid-area: c;
+}
+  
+.c {
+  grid-area: c;
+}

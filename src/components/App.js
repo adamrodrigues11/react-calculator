@@ -12,11 +12,25 @@ function App() {
   const [operandA, setOperandA] = useState("0");
   const [operator, setOperator] = useState("");
   const [operandB, setOperandB] = useState("");
+  
+  // const MAX_DISPLAY_LENGTH = 14; 
+
+  // function roundToFit(operand) {
+  //   const operandFlt = parseFloat(operand);
+  //   const operandWholeNum = Math.round(operandFlt);
+  //   const maxDecimalPlaces = MAX_DISPLAY_LENGTH - operandWholeNum.length - 1;
+  //   if (maxDecimalPlaces < 0) {
+  //     return "Error";
+  //   }  
+  //   return +parseFloat(operand).toFixed(maxDecimalPlaces).toString();
+  // }
+  const display = operandB ? operandB : 
+    operator ? operator : operandA
 
   function updateOperandB(value) {
-    if (value !== "." || !operandB.includes(".")) {
-      setOperandB(operandB + value);
-    }
+    if (value !== "." || !operandB.includes(".")) { 
+          setOperandB(operandB + value);
+      }
   }
 
   function updateOperandA(value) {
@@ -35,7 +49,7 @@ function App() {
   function evaluateExpression() {
     const operandsFloat = [
       parseFloat(operandA), 
-      operandB ? parseFloat(operandB) : 0
+      operandB ? parseFloat(operandB) : 0.0
     ];
     let result;
     switch (operator) {
@@ -50,6 +64,9 @@ function App() {
         break;
       case "/":
         result = operandsFloat[0] / operandsFloat[1];
+        break;
+      default: // case where no operator enterred
+        result = operandsFloat[0];
         break;
     }
     if (isNaN(result) || !isFinite(result)) {
@@ -96,8 +113,9 @@ function App() {
         setMemory(0);
         break;
       case "Memory Recall":
-        operandB ? setOperandB(memory.toString()) : 
-          setOperandA(memory.toString());
+        const rounded = +memory.toFixed(5);
+        operandB ? setOperandB(rounded.toString()) : 
+          setOperandA(rounded.toString());
         break;
       case "Memory Subtract":
         setMemory(memory - activeOperandFlt);
@@ -109,7 +127,8 @@ function App() {
   }
 
   function percent(operand) {
-    return (parseFloat(operand) / 100.0).toString();
+    const result = parseFloat(operand) / 100.0;
+    return result.toString();
   }
 
   function sqrt(operand) {
@@ -176,7 +195,7 @@ function App() {
       />
   )
     return(
-      <div>{buttons}</div>
+      <div className="buttonArea">{buttons}</div>
     );
   }
 
@@ -185,16 +204,14 @@ function App() {
   }, [])
 
   return (
-    <div className="wrapper">
-      <div className="calculator">
+      <div className="pageWrapper">
         <Header title={"Calculator App"}/>
-        <Display text={ operandA + operator + operandB }/>
-        <div className="buttonArea">
-        {createButtons()}
+        <div className="calculatorWrapper">
+          <Display text={display}/>
+          {createButtons()}
         </div>
+        <Footer author={"Adam Rodrigues"}/>
       </div>
-      <Footer author={"Adam Rodrigues"}/>
-    </div>
   );
 }
 

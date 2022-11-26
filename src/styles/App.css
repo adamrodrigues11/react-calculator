@@ -1,4 +1,4 @@
-.wrapper{
+.pageWrapper{
   box-sizing: border-box;
   text-align: center;
   background-color: #282c34;
@@ -16,7 +16,7 @@
   box-sizing: inherit;
 }
 
-.calculator {
+.calculatorWrapper {
   padding: 10px;
   width: 340px;
   height: 540px;
@@ -27,10 +27,142 @@
 }
 
 .buttonArea {
+  padding: 10px;
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - 120px);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-areas: 
+  "ac       ac        c            mc"
+  "ms       mr        m-plus       m-minus"
+  "sign     percent   square-root  divide"
+  "seven    eight     nine         multiply"
+  "four     five      six          subtract"
+  "one      two       three        add"
+  "decimal  zero      equal        equal";
   grid-gap: 10px;
 }
+
+button {
+  border: none;
+  width: 100%;
+  background-color: rgb(80, 60, 209);
+  font-size: 24px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  outline: none;
+  height: 50px;
+  font-family: 'Enriqueta', serif;
+}
+
+.ac {
+grid-area: ac;
+}
+
+.c {
+grid-area: c;
+}
+
+.c {
+grid-area: c;
+}
+
+.mc {
+grid-area: mc;
+}
+
+.ms {
+grid-area: ms;
+}
+
+.mr {
+grid-area: mr;
+}
+
+.m-plus {
+grid-area: m-plus
+}
+
+.m-minus {
+grid-area: m-minus;
+}
+
+.sign {
+grid-area: sign;
+}
+
+.percent {
+grid-area: percent;
+}
+
+.square-root {
+grid-area: square-root;
+}
+
+.divide {
+grid-area: divide;
+}
+
+.multiply {
+grid-area: multiply;
+}
+
+.add {
+grid-area: add;
+}
+
+.subtract {
+grid-area: subtract;
+}
+
+.equal {
+grid-area: equal;
+}
+
+.decimal {
+grid-area: decimal;
+}
+
+.zero {
+grid-area: zero;
+}
+
+.one {
+grid-area: one;
+}
+
+.two {
+grid-area: two;
+}
+
+.three {
+grid-area: three;
+}
+
+.four {
+grid-area: four;
+}
+
+.five {
+grid-area: five;
+}
+
+.six {
+grid-area: six;
+}
+
+.seven {
+grid-area: seven;
+}
+
+.eight {
+grid-area: eight;
+}
+
+.nine {
+grid-area: nine;
+}
+
+
