@@ -8,25 +8,35 @@ import { useState, useEffect } from 'react';
 import { calculatorButtons } from '../data/calculator-bonus-03-button-data.js'
 
 function App() {
+  // memory state stored as number
   const [memory, setMemory] = useState(0);
+  // operand and operator states stored as strings
   const [operandA, setOperandA] = useState("0");
   const [operator, setOperator] = useState("");
   const [operandB, setOperandB] = useState("");
   
-  // const MAX_DISPLAY_LENGTH = 14; 
+  const MAX_DISPLAY_LENGTH = 12; // not including -, exp 
 
-  // function roundToFit(operand) {
-  //   const operandFlt = parseFloat(operand);
-  //   const operandWholeNum = Math.round(operandFlt);
-  //   const maxDecimalPlaces = MAX_DISPLAY_LENGTH - operandWholeNum.length - 1;
-  //   if (maxDecimalPlaces < 0) {
-  //     return "Error";
-  //   }  
-  //   return +parseFloat(operand).toFixed(maxDecimalPlaces).toString();
-  // }
-  const display = operandB ? operandB : 
-    operator ? operator : operandA
+  function generateDisplay() {
+    let displayStr; 
+    // set display to active state
+    if (operandB) {
+      displayStr = operandB;
+    } else if (operator) {
+      return operator;
+    } else {
+      displayStr = operandA;
+    }
+    
+    const value = parseFloat(displayStr);
 
+    // use sci notation if display won't fit, but keep true value in the state
+    if (displayStr.length > MAX_DISPLAY_LENGTH) {
+      displayStr = value.toExponential(MAX_DISPLAY_LENGTH - 1);
+    } 
+    return displayStr;
+  }
+  
   function updateOperandB(value) {
     if (value !== "." || !operandB.includes(".")) { 
           setOperandB(operandB + value);
@@ -47,6 +57,7 @@ function App() {
   }
 
   function evaluateExpression() {
+    // use this function for safe evals of input
     const operandsFloat = [
       parseFloat(operandA), 
       operandB ? parseFloat(operandB) : 0.0
@@ -69,6 +80,7 @@ function App() {
         result = operandsFloat[0];
         break;
     }
+    // throw error to display when applicable (eg. for div by 0)
     if (isNaN(result) || !isFinite(result)) {
       throw Error("Error")
     }
@@ -96,7 +108,9 @@ function App() {
   }  
 
   function handleClearButtonClicked(value) {
+    // all clear
     (value === "All Clear") ? resetDisplay() :
+    // clear
       operandB ? setOperandB("") :
         operator ? setOperator("") :
           setOperandA("0");
@@ -113,9 +127,8 @@ function App() {
         setMemory(0);
         break;
       case "Memory Recall":
-        const rounded = +memory.toFixed(5);
-        operandB ? setOperandB(rounded.toString()) : 
-          setOperandA(rounded.toString());
+        operandB ? setOperandB(memory.toString()) : 
+          setOperandA(memory.toString());
         break;
       case "Memory Subtract":
         setMemory(memory - activeOperandFlt);
@@ -133,6 +146,7 @@ function App() {
 
   function sqrt(operand) {
     const result = Math.sqrt(parseFloat(operand));
+    // Throw error to display for sqrt of negative number
     if (isNaN(result)) {
       throw Error("Error")
     }
@@ -207,7 +221,7 @@ function App() {
       <div className="pageWrapper">
         <Header title={"Calculator App"}/>
         <div className="calculatorWrapper">
-          <Display text={display}/>
+          <Display text={generateDisplay()}/>
           {createButtons()}
         </div>
         <Footer author={"Adam Rodrigues"}/>
